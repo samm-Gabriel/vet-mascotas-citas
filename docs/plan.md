@@ -4,8 +4,8 @@ Historia de usuario: #1
 
 | # | Sub-historia | Etapa | Issue | Estado |
 |---|---|---|---|---|
-| 1 | Modelo Prisma (Dueño, Mascota, Cita, Perfil), migración, seed y OpenAPI | backend | #2 | pendiente |
-| 2 | API Routes CRUD dueños, mascotas, citas y perfiles | backend | #3 | pendiente |
+| 1 | Modelo Prisma (Dueño, Mascota, Cita, Perfil), migración, seed y OpenAPI | backend | #2 | hecha |
+| 2 | API Routes CRUD dueños, mascotas, citas y perfiles | backend | #3 | hecha |
 | 3 | Pantallas dueños, mascotas, agenda y selector de perfil (v0) | frontend | #4 | pendiente |
 | 4 | Integración UI ↔ API real, sin mocks, build en verde | integracion | #5 | pendiente |
 | 5 | Pruebas Vitest API y smoke de pantallas | pruebas | #6 | pendiente |
