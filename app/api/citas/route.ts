@@ -3,7 +3,7 @@ import {
   handleRouteError,
   jsonData,
   parsePagination,
-} from "@/lib/api";
+} from "@/lib/route-api";
 import { citaCreateSchema } from "@/lib/validators";
 import { Prisma } from "@prisma/client";
 

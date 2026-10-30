@@ -4,7 +4,7 @@ import {
   jsonData,
   jsonError,
   parseIdParam,
-} from "@/lib/api";
+} from "@/lib/route-api";
 import { mascotaUpdateSchema } from "@/lib/validators";
 
 type RouteContext = { params: Promise<{ id: string }> };

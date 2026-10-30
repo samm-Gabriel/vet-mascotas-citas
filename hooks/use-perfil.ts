@@ -1,0 +1,3 @@
+'use client'
+import { useEffect, useState } from 'react'
+export function usePerfil() { const [perfil, setPerfil] = useState<{ id: string; nombre: string } | null>(null); useEffect(() => { const id = localStorage.getItem('vet-perfil-id'); const nombre = localStorage.getItem('vet-perfil-nombre'); if (id && nombre) setPerfil({ id, nombre }) }, []); const guardarPerfil = (id: string | number, nombre: string) => { localStorage.setItem('vet-perfil-id', String(id)); localStorage.setItem('vet-perfil-nombre', nombre); setPerfil({ id: String(id), nombre }) }; const limpiarPerfil = () => { localStorage.removeItem('vet-perfil-id'); localStorage.removeItem('vet-perfil-nombre'); setPerfil(null) }; return { perfil, guardarPerfil, limpiarPerfil } }

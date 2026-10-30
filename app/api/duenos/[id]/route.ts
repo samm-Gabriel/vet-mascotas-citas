@@ -4,7 +4,7 @@ import {
   jsonData,
   jsonError,
   parseIdParam,
-} from "@/lib/api";
+} from "@/lib/route-api";
 import { duenoUpdateSchema } from "@/lib/validators";
 
 type RouteContext = { params: Promise<{ id: string }> };
