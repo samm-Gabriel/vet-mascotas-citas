@@ -1,0 +1,16 @@
+@startuml P1_trace
+!pragma layout smetana
+title P1 Gestión de configuración y acceso
+left to right direction
+package "P1 Gestión de configuración y acceso" as P1
+usecase "CU01 Seleccionar perfil" as CU01
+usecase "CU02 Gestionar perfiles" as CU02
+usecase "CU03 Consultar panel" as CU03
+usecase "CU04 Gestionar servicios" as CU04
+usecase "CU05 Consultar indicadores" as CU05
+P1 ..> CU01 : <<trace>>
+P1 ..> CU02 : <<trace>>
+P1 ..> CU03 : <<trace>>
+P1 ..> CU04 : <<trace>>
+P1 ..> CU05 : <<trace>>
+@enduml

@@ -1,0 +1,31 @@
+{
+  "slug": "vet-mascotas-citas",
+  "sistema": "Sistema de gestión de citas veterinarias Vet Mascotas Citas",
+  "nombreCorto": "Vet Mascotas Citas",
+  "universidad": "Universidad [Nombre]",
+  "facultad": "Facultad de Ingeniería y Ciencias",
+  "grupo": "GRUPO #1",
+  "integrantes": [
+    { "nombre": "Gabriel [Apellido]", "registro": "[Registro universitario]" }
+  ],
+  "materia": "Taller de Análisis y Programación",
+  "sigla": "TAP",
+  "grupoMateria": "SA",
+  "docente": "[Nombre del docente]",
+  "ciudad": "Santa Cruz",
+  "fecha": "10/2026",
+  "capitulos": [
+    "01-perfil.md",
+    "02-marco-teorico.md",
+    "03-modelo-negocio.md",
+    "04-captura-requisitos.md",
+    "05-analisis.md",
+    "06-diseno.md",
+    "07-implementacion.md",
+    "08-pruebas.md",
+    "09-conclusion.md",
+    "10-recomendacion.md",
+    "11-bibliografia.md",
+    "12-anexos.md"
+  ]
+}

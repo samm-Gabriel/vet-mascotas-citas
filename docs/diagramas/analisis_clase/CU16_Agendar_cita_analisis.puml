@@ -1,0 +1,39 @@
+@startuml CU16_Agendar_cita_analisis
+!pragma layout smetana
+title CU16 - Agendar cita
+allowmixing
+left to right direction
+skinparam class {
+  BackgroundColor<<boundary>> #CFE2F3
+  BackgroundColor<<control>> #FFE599
+  BackgroundColor<<entity>> #B6D7A8
+}
+actor Usuario
+class Vcita <<boundary>> {
+  +mostrarFormulario(): void
+  +enviarCita(mascotaId, fechaHora, motivo): void
+  +mostrarConfirmacion(): void
+}
+class Ccita <<control>> {
+  +agendar(datos): void
+  +validarDatos(datos): boolean
+}
+class Emascota <<entity>> {
+  +id: Integer
+  +nombre: String
+  +duenoId: Integer
+  +validarExistencia(id): boolean
+}
+class Ecita <<entity>> {
+  +id: Integer
+  +mascotaId: Integer
+  +fechaHora: DateTime
+  +motivo: String
+  +insertar(): Integer
+}
+Usuario -- Vcita
+Vcita -- Ccita
+Ccita -- Emascota
+Ccita -- Ecita
+Emascota "1" -- "0..*" Ecita
+@enduml

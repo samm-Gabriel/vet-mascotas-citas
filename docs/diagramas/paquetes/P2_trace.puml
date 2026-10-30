@@ -1,0 +1,16 @@
+@startuml P2_trace
+!pragma layout smetana
+title P2 Gestión de dueños
+left to right direction
+package "P2 Gestión de dueños" as P2
+usecase "CU06 Gestionar dueños" as CU06
+usecase "CU07 Consultar dueño" as CU07
+usecase "CU08 Exportar dueños" as CU08
+usecase "CU09 Notificar dueño" as CU09
+usecase "CU10 Fusionar dueños" as CU10
+P2 ..> CU06 : <<trace>>
+P2 ..> CU07 : <<trace>>
+P2 ..> CU08 : <<trace>>
+P2 ..> CU09 : <<trace>>
+P2 ..> CU10 : <<trace>>
+@enduml

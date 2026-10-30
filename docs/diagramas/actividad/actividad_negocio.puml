@@ -1,0 +1,17 @@
+@startuml actividad_negocio
+!pragma layout smetana
+title Proceso de atención con cita en clínica veterinaria
+|Dueño de mascota|
+start
+:Solicitar cita;
+|Recepción|
+:Registrar o localizar dueño;
+:Registrar o seleccionar mascota;
+:Agendar fecha y hora;
+:Confirmar motivo de consulta;
+|Veterinario|
+:Atender en la hora programada;
+|Recepción|
+:Registrar salida y próximos pasos;
+stop
+@enduml

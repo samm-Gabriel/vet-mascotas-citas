@@ -1,0 +1,16 @@
+@startuml P4_trace
+!pragma layout smetana
+title P4 Gestión de citas
+left to right direction
+package "P4 Gestión de citas" as P4
+usecase "CU16 Agendar cita" as CU16
+usecase "CU17 Consultar citas" as CU17
+usecase "CU18 Modificar cita" as CU18
+usecase "CU19 Cancelar cita" as CU19
+usecase "CU20 Reagendar en bloque" as CU20
+P4 ..> CU16 : <<trace>>
+P4 ..> CU17 : <<trace>>
+P4 ..> CU18 : <<trace>>
+P4 ..> CU19 : <<trace>>
+P4 ..> CU20 : <<trace>>
+@enduml

@@ -1,0 +1,15 @@
+@startuml despliegue
+!pragma layout smetana
+title Diagrama de despliegue
+node "Cliente" {
+  artifact "Navegador web"
+}
+node "Plataforma Vercel\n(Next.js 16)" {
+  artifact "Aplicación web\n(RSC + API Routes)"
+}
+node "Servidor de BD" {
+  database "PostgreSQL"
+}
+"Navegador web" --> "Aplicación web\n(RSC + API Routes)" : HTTPS
+"Aplicación web\n(RSC + API Routes)" --> "PostgreSQL" : TCP 5432 (Prisma)
+@enduml

@@ -1,0 +1,40 @@
+@startuml diagrama_clases
+!pragma layout smetana
+title Diagrama de clases del dominio
+class Dueno {
+  id: Integer
+  nombre: String
+  email: String
+  telefono: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+class Mascota {
+  id: Integer
+  nombre: String
+  especie: String
+  raza: String
+  duenoId: Integer
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+class Cita {
+  id: Integer
+  mascotaId: Integer
+  fechaHora: DateTime
+  motivo: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+class Perfil {
+  id: Integer
+  slug: String
+  nombre: String
+  descripcion: String
+  activo: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+Dueno "1" -- "0..*" Mascota
+Mascota "1" -- "0..*" Cita
+@enduml

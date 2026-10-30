@@ -1,0 +1,15 @@
+@startuml CU16_Agendar_cita_comunicacion
+!pragma layout smetana
+title CU16 - Agendar cita
+left to right direction
+actor "Usuario" as Actor
+boundary "Vcita" as Vcita
+control "Ccita" as Ccita
+entity "Emascota" as Emascota
+entity "Ecita" as Ecita
+
+Actor -- Vcita : "1: enviarCita(mascotaId, fechaHora, motivo) →\n2: mostrarConfirmacion() ←"
+Vcita -- Ccita : "1.1: agendar(datos) →"
+Ccita -- Emascota : "1.2: validarExistencia(mascotaId) →"
+Ccita -- Ecita : "1.3: ~[mascota válida] insertar(cita) →"
+@enduml

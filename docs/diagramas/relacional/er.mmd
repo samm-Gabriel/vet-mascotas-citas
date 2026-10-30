@@ -1,0 +1,37 @@
+erDiagram
+    dueno {
+        int id PK
+        varchar nombre
+        varchar email UK
+        varchar telefono
+        timestamptz createdAt
+        timestamptz updatedAt
+    }
+    mascota {
+        int id PK
+        varchar nombre
+        varchar especie
+        varchar raza
+        int duenoId FK
+        timestamptz createdAt
+        timestamptz updatedAt
+    }
+    cita {
+        int id PK
+        int mascotaId FK
+        timestamptz fechaHora
+        varchar motivo
+        timestamptz createdAt
+        timestamptz updatedAt
+    }
+    perfil {
+        int id PK
+        varchar slug UK
+        varchar nombre
+        varchar descripcion
+        boolean activo
+        timestamptz createdAt
+        timestamptz updatedAt
+    }
+    dueno ||--o{ mascota : tiene
+    mascota ||--o{ cita : agenda

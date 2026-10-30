@@ -1,0 +1,16 @@
+@startuml P3_trace
+!pragma layout smetana
+title P3 Gestión de mascotas
+left to right direction
+package "P3 Gestión de mascotas" as P3
+usecase "CU11 Gestionar mascotas" as CU11
+usecase "CU12 Consultar mascota" as CU12
+usecase "CU13 Historial clínico" as CU13
+usecase "CU14 Especies y razas" as CU14
+usecase "CU15 Transferir mascota" as CU15
+P3 ..> CU11 : <<trace>>
+P3 ..> CU12 : <<trace>>
+P3 ..> CU13 : <<trace>>
+P3 ..> CU14 : <<trace>>
+P3 ..> CU15 : <<trace>>
+@enduml

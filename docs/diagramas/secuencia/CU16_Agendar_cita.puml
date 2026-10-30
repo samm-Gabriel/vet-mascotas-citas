@@ -1,0 +1,40 @@
+@startuml CU16_Agendar_cita
+!pragma layout smetana
+title CU16 - Agendar cita
+skinparam maxMessageSize 150
+hide footbox
+autonumber
+actor "Usuario" as Actor
+boundary "Vcita" as Vcita
+control "Ccita" as Ccita
+entity "Emascota" as Emascota
+entity "Ecita" as Ecita
+
+== Abrir formulario ==
+Actor -> Vcita : abrirNuevaCita()
+activate Vcita
+Vcita -> Vcita : listMascotas()
+Vcita --> Actor : formulario con mascotas
+
+== Confirmar cita ==
+Actor -> Vcita : enviarCita(mascotaId, fechaHora, motivo)
+Vcita -> Ccita : agendar(datos)
+activate Ccita
+Ccita -> Ccita : validarDatos(datos)
+break datos inválidos (E1)
+  Ccita --> Vcita : rechazo VALIDATION_ERROR
+  Vcita --> Actor : «Datos inválidos»
+end
+Ccita -> Emascota : validarExistencia(mascotaId)
+break referencia inválida (E2)
+  Emascota --> Ccita : error FK
+  Ccita --> Vcita : rechazo
+  Vcita --> Actor : «Referencia inválida»
+end
+Ccita -> Ecita : insertar(cita)
+Ecita --> Ccita : citaId
+Ccita --> Vcita : cita creada
+deactivate Ccita
+Vcita --> Actor : redirección a agenda
+deactivate Vcita
+@enduml

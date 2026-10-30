@@ -1,0 +1,12 @@
+@startuml CU16_Agendar_cita
+!pragma layout smetana
+title CU16 - Agendar cita
+left to right direction
+actor Usuario
+rectangle "Sistema Vet Mascotas Citas" {
+  usecase "CU16\nAgendar cita" as CU16
+  usecase "CU12\nConsultar mascota" as CU12
+}
+Usuario -- CU16
+CU16 ..> CU12 : <<include>>
+@enduml

@@ -1,0 +1,22 @@
+@startuml casos_uso_general
+!pragma layout smetana
+title Casos de uso generales
+left to right direction
+actor Usuario
+rectangle "Sistema Vet Mascotas Citas" {
+  usecase "CU01\nSeleccionar perfil" as CU01
+  usecase "CU07\nConsultar dueño" as CU07
+  usecase "CU06\nGestionar dueños" as CU06
+  usecase "CU12\nConsultar mascota" as CU12
+  usecase "CU11\nGestionar mascotas" as CU11
+  usecase "CU16\nAgendar cita" as CU16
+  usecase "CU17\nConsultar citas" as CU17
+}
+Usuario -- CU01
+Usuario -- CU06
+Usuario -- CU11
+Usuario -- CU16
+Usuario -- CU17
+CU11 ..> CU07 : <<include>>
+CU16 ..> CU12 : <<include>>
+@enduml

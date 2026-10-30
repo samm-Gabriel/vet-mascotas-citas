@@ -1,0 +1,28 @@
+@startuml casos_uso_ciclo2
+!pragma layout smetana
+title Casos de uso - Ciclo 2 (previstos)
+left to right direction
+actor Usuario
+rectangle "Sistema Vet Mascotas Citas" {
+  usecase "CU04\nGestionar servicios" as CU04
+  usecase "CU05\nConsultar indicadores" as CU05
+  usecase "CU08\nExportar dueños" as CU08
+  usecase "CU09\nNotificar dueño" as CU09
+  usecase "CU10\nFusionar dueños" as CU10
+  usecase "CU13\nHistorial clínico" as CU13
+  usecase "CU14\nEspecies y razas" as CU14
+  usecase "CU15\nTransferir mascota" as CU15
+  usecase "CU19\nCancelar cita" as CU19
+  usecase "CU20\nReagendar en bloque" as CU20
+}
+Usuario -- CU04
+Usuario -- CU05
+Usuario -- CU08
+Usuario -- CU09
+Usuario -- CU10
+Usuario -- CU13
+Usuario -- CU14
+Usuario -- CU15
+Usuario -- CU19
+Usuario -- CU20
+@enduml

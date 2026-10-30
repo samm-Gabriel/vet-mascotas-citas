@@ -1,0 +1,13 @@
+@startuml vista_paquetes
+!pragma layout smetana
+title Vista de paquetes
+package "P1 Gestión de configuración y acceso" as P1
+package "P2 Gestión de dueños" as P2
+package "P3 Gestión de mascotas" as P3
+package "P4 Gestión de citas" as P4
+P3 ..> P2 : dueño de la mascota
+P4 ..> P3 : mascota de la cita
+P4 ..> P1 : contexto de perfil en UI
+P3 ..> P1 : contexto de perfil en UI
+P2 ..> P1 : contexto de perfil en UI
+@enduml

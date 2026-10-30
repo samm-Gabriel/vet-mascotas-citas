@@ -1,0 +1,17 @@
+@startuml paquetes_logicos
+!pragma layout smetana
+title Arquitectura lógica
+package "Presentación (app/)" as Pres {
+  package "P1 Configuración" as V1
+  package "P2 Dueños" as V2
+  package "P3 Mascotas" as V3
+  package "P4 Citas" as V4
+}
+package "Lógica (app/api + lib)" as Neg {
+  package "Validadores Zod" as Val
+  package "Route handlers" as Api
+}
+package "Acceso a datos (Prisma)" as Dat
+Pres ..> Neg
+Neg ..> Dat
+@enduml

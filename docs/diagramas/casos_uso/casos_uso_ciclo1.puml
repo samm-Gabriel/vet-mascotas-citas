@@ -1,0 +1,28 @@
+@startuml casos_uso_ciclo1
+!pragma layout smetana
+title Casos de uso - Ciclo 1
+left to right direction
+actor Usuario
+rectangle "Sistema Vet Mascotas Citas" {
+  usecase "CU01\nSeleccionar perfil" as CU01
+  usecase "CU02\nGestionar perfiles" as CU02
+  usecase "CU03\nConsultar panel" as CU03
+  usecase "CU06\nGestionar dueños" as CU06
+  usecase "CU07\nConsultar dueño" as CU07
+  usecase "CU11\nGestionar mascotas" as CU11
+  usecase "CU12\nConsultar mascota" as CU12
+  usecase "CU16\nAgendar cita" as CU16
+  usecase "CU17\nConsultar citas" as CU17
+  usecase "CU18\nModificar cita" as CU18
+}
+Usuario -- CU01
+Usuario -- CU02
+Usuario -- CU03
+Usuario -- CU06
+Usuario -- CU11
+Usuario -- CU16
+Usuario -- CU17
+Usuario -- CU18
+CU11 ..> CU07 : <<include>>
+CU16 ..> CU12 : <<include>>
+@enduml
