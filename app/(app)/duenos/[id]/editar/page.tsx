@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
 import { createDueno, getDueno, updateDueno } from "@/lib/api";
 
 export default function DuenoForm() {
@@ -18,9 +19,11 @@ export default function DuenoForm() {
   const [form, setForm] = useState({ nombre: "", email: "", telefono: "" });
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(edit);
 
   useEffect(() => {
     if (!id) return;
+    setLoading(true);
     getDueno(Number(id))
       .then((d) =>
         setForm({
@@ -29,12 +32,14 @@ export default function DuenoForm() {
           telefono: d.telefono || "",
         }),
       )
-      .catch((e) => setError(e.message));
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
   }, [id]);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
+    setError("");
     const body = {
       nombre: form.nombre,
       email: form.email || null,
@@ -59,42 +64,46 @@ export default function DuenoForm() {
           <CardTitle>{edit ? "Editar dueño" : "Nuevo dueño"}</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={submit} className="flex flex-col gap-5">
-            {error && (
-              <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="nombre">Nombre *</Label>
-              <Input
-                id="nombre"
-                required
-                value={form.nombre}
-                onChange={(e) => setForm({ ...form, nombre: e.target.value })}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="telefono">Teléfono</Label>
-              <Input
-                id="telefono"
-                value={form.telefono}
-                onChange={(e) => setForm({ ...form, telefono: e.target.value })}
-              />
-            </div>
-            <Button type="submit" disabled={saving}>
-              {saving ? "Guardando..." : "Guardar dueño"}
-            </Button>
-          </form>
+          {loading ? (
+            <Skeleton className="h-64 w-full" />
+          ) : (
+            <form onSubmit={submit} className="flex flex-col gap-5">
+              {error && (
+                <Alert variant="destructive">
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="nombre">Nombre *</Label>
+                <Input
+                  id="nombre"
+                  required
+                  value={form.nombre}
+                  onChange={(e) => setForm({ ...form, nombre: e.target.value })}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="telefono">Teléfono</Label>
+                <Input
+                  id="telefono"
+                  value={form.telefono}
+                  onChange={(e) => setForm({ ...form, telefono: e.target.value })}
+                />
+              </div>
+              <Button type="submit" disabled={saving}>
+                {saving ? "Guardando..." : "Guardar dueño"}
+              </Button>
+            </form>
+          )}
         </CardContent>
       </Card>
     </div>

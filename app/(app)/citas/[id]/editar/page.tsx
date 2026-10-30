@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   createCita,
   getCita,
@@ -25,12 +26,17 @@ export default function CitaForm() {
   const [mascotas, setMascotas] = useState<MascotaListItem[]>([]);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(edit);
 
   useEffect(() => {
     listMascotas()
       .then((r) => setMascotas(r.items))
       .catch((e) => setError(e.message));
-    if (!id) return;
+    if (!id) {
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
     getCita(Number(id))
       .then((c) =>
         setF({
@@ -39,12 +45,14 @@ export default function CitaForm() {
           motivo: c.motivo,
         }),
       )
-      .catch((e) => setError(e.message));
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
   }, [id]);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
+    setError("");
     const body = {
       mascotaId: Number(f.mascotaId),
       fechaHora: new Date(f.fechaHora).toISOString(),
@@ -67,7 +75,10 @@ export default function CitaForm() {
           <CardTitle>{edit ? "Editar cita" : "Nueva cita"}</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={submit} className="flex flex-col gap-5">
+          {loading ? (
+            <Skeleton className="h-80 w-full" />
+          ) : (
+            <form onSubmit={submit} className="flex flex-col gap-5">
             {error && (
               <Alert variant="destructive">
                 <AlertDescription>{error}</AlertDescription>
@@ -113,6 +124,7 @@ export default function CitaForm() {
               {saving ? "Guardando..." : "Guardar cita"}
             </Button>
           </form>
+          )}
         </CardContent>
       </Card>
     </div>

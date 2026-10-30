@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   createMascota,
   getMascota,
@@ -25,12 +26,17 @@ export default function MascotaForm() {
   const [duenos, setDuenos] = useState<Dueno[]>([]);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(edit);
 
   useEffect(() => {
     listDuenos()
       .then((r) => setDuenos(r.items))
       .catch((e) => setError(e.message));
-    if (!id) return;
+    if (!id) {
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
     getMascota(Number(id))
       .then((m) =>
         setF({
@@ -40,12 +46,14 @@ export default function MascotaForm() {
           duenoId: String(m.duenoId),
         }),
       )
-      .catch((e) => setError(e.message));
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
   }, [id]);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
+    setError("");
     const body = {
       nombre: f.nombre,
       especie: f.especie,
@@ -71,7 +79,10 @@ export default function MascotaForm() {
           <CardTitle>{edit ? "Editar mascota" : "Nueva mascota"}</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={submit} className="flex flex-col gap-5">
+          {loading ? (
+            <Skeleton className="h-72 w-full" />
+          ) : (
+            <form onSubmit={submit} className="flex flex-col gap-5">
             {error && (
               <Alert variant="destructive">
                 <AlertDescription>{error}</AlertDescription>
@@ -120,6 +131,7 @@ export default function MascotaForm() {
               {saving ? "Guardando..." : "Guardar mascota"}
             </Button>
           </form>
+          )}
         </CardContent>
       </Card>
     </div>

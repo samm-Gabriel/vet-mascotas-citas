@@ -19,7 +19,7 @@ export async function GET(_request: Request, context: RouteContext) {
 
     const perfil = await prisma.perfil.findUnique({ where: { id } });
     if (!perfil) {
-      return jsonError("NOT_FOUND", "Perfil no encontrado", 404);
+      return jsonError("NOT_FOUND", "Recurso no encontrado", 404);
     }
     return jsonData(perfil);
   } catch (error) {

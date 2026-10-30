@@ -102,11 +102,18 @@ export default function DuenosPage() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() =>
+                        onClick={() => {
+                          if (
+                            !window.confirm(
+                              `¿Eliminar a ${d.nombre}? Esta acción no se puede deshacer.`,
+                            )
+                          ) {
+                            return;
+                          }
                           deleteDueno(d.id)
                             .then(load)
-                            .catch((e) => setError(e.message))
-                        }
+                            .catch((e) => setError(e.message));
+                        }}
                         aria-label="Eliminar"
                       >
                         <Trash2 />

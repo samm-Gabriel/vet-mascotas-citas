@@ -22,7 +22,7 @@ export async function GET(_request: Request, context: RouteContext) {
       include: { mascotas: true },
     });
     if (!dueno) {
-      return jsonError("NOT_FOUND", "Dueño no encontrado", 404);
+      return jsonError("NOT_FOUND", "Recurso no encontrado", 404);
     }
     return jsonData(dueno);
   } catch (error) {

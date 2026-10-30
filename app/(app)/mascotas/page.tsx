@@ -91,11 +91,18 @@ export default function MascotasPage() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() =>
+                        onClick={() => {
+                          if (
+                            !window.confirm(
+                              `¿Eliminar a ${m.nombre}? Esta acción no se puede deshacer.`,
+                            )
+                          ) {
+                            return;
+                          }
                           deleteMascota(m.id)
                             .then(load)
-                            .catch((e) => setError(e.message))
-                        }
+                            .catch((e) => setError(e.message));
+                        }}
                       >
                         <Trash2 />
                       </Button>

@@ -22,7 +22,7 @@ export async function GET(_request: Request, context: RouteContext) {
       include: { mascota: { include: { dueno: true } } },
     });
     if (!cita) {
-      return jsonError("NOT_FOUND", "Cita no encontrada", 404);
+      return jsonError("NOT_FOUND", "Recurso no encontrado", 404);
     }
     return jsonData(cita);
   } catch (error) {

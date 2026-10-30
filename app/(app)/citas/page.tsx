@@ -93,11 +93,18 @@ export default function CitasPage() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() =>
+                        onClick={() => {
+                          if (
+                            !window.confirm(
+                              "¿Eliminar esta cita? Esta acción no se puede deshacer.",
+                            )
+                          ) {
+                            return;
+                          }
                           deleteCita(c.id)
                             .then(load)
-                            .catch((e) => setError(e.message))
-                        }
+                            .catch((e) => setError(e.message));
+                        }}
                       >
                         <Trash2 />
                       </Button>

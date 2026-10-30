@@ -22,7 +22,7 @@ export async function GET(_request: Request, context: RouteContext) {
       include: { dueno: true, citas: { orderBy: { fechaHora: "asc" } } },
     });
     if (!mascota) {
-      return jsonError("NOT_FOUND", "Mascota no encontrada", 404);
+      return jsonError("NOT_FOUND", "Recurso no encontrado", 404);
     }
     return jsonData(mascota);
   } catch (error) {
@@ -42,7 +42,7 @@ export async function PATCH(request: Request, context: RouteContext) {
     if (body.duenoId !== undefined) {
       const dueno = await prisma.dueno.findUnique({ where: { id: body.duenoId } });
       if (!dueno) {
-        return jsonError("VALIDATION_ERROR", "Dueño no encontrado", 400);
+        return jsonError("VALIDATION_ERROR", "Referencia inválida", 400);
       }
     }
 
