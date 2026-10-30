@@ -1,0 +1,928 @@
+openapi: 3.1.0
+info:
+  title: Vet Mascotas Citas API
+  version: 1.0.0
+  description: API REST para dueños, mascotas, citas y perfiles (selector UI).
+servers:
+  - url: http://localhost:3000
+    description: Desarrollo local
+
+tags:
+  - name: Duenos
+  - name: Mascotas
+  - name: Citas
+  - name: Perfiles
+
+paths:
+  /api/duenos:
+    get:
+      tags: [Duenos]
+      summary: Listar dueños
+      parameters:
+        - $ref: '#/components/parameters/q'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+      responses:
+        '200':
+          description: Lista paginada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DuenoListResponse'
+              examples:
+                ok:
+                  value:
+                    data:
+                      items:
+                        - id: 1
+                          nombre: María Gómez
+                          email: maria.gomez@example.com
+                          telefono: "+591 70000001"
+                      page: 1
+                      pageSize: 20
+                      total: 1
+        '500':
+          $ref: '#/components/responses/InternalError'
+    post:
+      tags: [Duenos]
+      summary: Crear dueño
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DuenoCreate'
+            examples:
+              crear:
+                value:
+                  nombre: Carlos Pérez
+                  email: carlos@example.com
+                  telefono: "+591 71111111"
+      responses:
+        '201':
+          description: Creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DuenoResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/duenos/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+    get:
+      tags: [Duenos]
+      summary: Obtener dueño por id
+      responses:
+        '200':
+          description: Dueño con mascotas
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/DuenoResponse'
+                  - type: object
+                    properties:
+                      data:
+                        allOf:
+                          - $ref: '#/components/schemas/Dueno'
+                          - type: object
+                            properties:
+                              mascotas:
+                                type: array
+                                items:
+                                  $ref: '#/components/schemas/Mascota'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    patch:
+      tags: [Duenos]
+      summary: Actualizar dueño
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DuenoUpdate'
+      responses:
+        '200':
+          description: Actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DuenoResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    delete:
+      tags: [Duenos]
+      summary: Eliminar dueño
+      responses:
+        '200':
+          description: Eliminado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdDeleteResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/mascotas:
+    get:
+      tags: [Mascotas]
+      summary: Listar mascotas
+      parameters:
+        - $ref: '#/components/parameters/q'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+        - name: duenoId
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Lista paginada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MascotaListResponse'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    post:
+      tags: [Mascotas]
+      summary: Crear mascota
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MascotaCreate'
+            examples:
+              crear:
+                value:
+                  nombre: Max
+                  especie: Perro
+                  raza: Labrador
+                  duenoId: 1
+      responses:
+        '201':
+          description: Creada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MascotaResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/mascotas/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+    get:
+      tags: [Mascotas]
+      summary: Obtener mascota por id
+      responses:
+        '200':
+          description: Mascota con dueño y citas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MascotaDetailResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    patch:
+      tags: [Mascotas]
+      summary: Actualizar mascota
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MascotaUpdate'
+      responses:
+        '200':
+          description: Actualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MascotaResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    delete:
+      tags: [Mascotas]
+      summary: Eliminar mascota
+      responses:
+        '200':
+          description: Eliminada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdDeleteResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/citas:
+    get:
+      tags: [Citas]
+      summary: Listar citas
+      parameters:
+        - $ref: '#/components/parameters/q'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+        - name: mascotaId
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+        - name: desde
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: hasta
+          in: query
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: Lista paginada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CitaListResponse'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    post:
+      tags: [Citas]
+      summary: Crear cita
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CitaCreate'
+            examples:
+              crear:
+                value:
+                  mascotaId: 1
+                  fechaHora: "2026-11-01T15:30:00.000Z"
+                  motivo: Vacunación
+      responses:
+        '201':
+          description: Creada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CitaResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/citas/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+    get:
+      tags: [Citas]
+      summary: Obtener cita por id
+      responses:
+        '200':
+          description: Cita con mascota y dueño
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CitaDetailResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    patch:
+      tags: [Citas]
+      summary: Actualizar cita
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CitaUpdate'
+      responses:
+        '200':
+          description: Actualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CitaResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    delete:
+      tags: [Citas]
+      summary: Eliminar cita
+      responses:
+        '200':
+          description: Eliminada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdDeleteResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/perfiles:
+    get:
+      tags: [Perfiles]
+      summary: Listar perfiles (selector UI)
+      parameters:
+        - $ref: '#/components/parameters/q'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+        - name: activo
+          in: query
+          schema:
+            type: string
+            enum: ['true']
+          description: Si es "true", solo perfiles activos
+      responses:
+        '200':
+          description: Lista paginada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerfilListResponse'
+              examples:
+                selector:
+                  value:
+                    data:
+                      items:
+                        - id: 1
+                          slug: recepcion
+                          nombre: Recepción
+                          descripcion: Agenda del día
+                          activo: true
+                      page: 1
+                      pageSize: 20
+                      total: 3
+        '500':
+          $ref: '#/components/responses/InternalError'
+    post:
+      tags: [Perfiles]
+      summary: Crear perfil
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PerfilCreate'
+      responses:
+        '201':
+          description: Creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerfilResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/perfiles/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+    get:
+      tags: [Perfiles]
+      summary: Obtener perfil por id
+      responses:
+        '200':
+          description: Perfil
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerfilResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    patch:
+      tags: [Perfiles]
+      summary: Actualizar perfil
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PerfilUpdate'
+      responses:
+        '200':
+          description: Actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerfilResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    delete:
+      tags: [Perfiles]
+      summary: Eliminar perfil
+      responses:
+        '200':
+          description: Eliminado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdDeleteResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+components:
+  parameters:
+    id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    q:
+      name: q
+      in: query
+      schema:
+        type: string
+      description: Búsqueda por texto
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+    pageSize:
+      name: pageSize
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+
+  responses:
+    ValidationError:
+      description: Error de validación
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            invalid:
+              value:
+                error:
+                  code: VALIDATION_ERROR
+                  message: Datos inválidos
+    NotFoundError:
+      description: Recurso no encontrado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            notFound:
+              value:
+                error:
+                  code: NOT_FOUND
+                  message: Recurso no encontrado
+    ConflictError:
+      description: Conflicto de unicidad
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            conflict:
+              value:
+                error:
+                  code: CONFLICT
+                  message: Conflicto con un valor único existente
+    InternalError:
+      description: Error interno
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            internal:
+              value:
+                error:
+                  code: INTERNAL_ERROR
+                  message: Error interno del servidor
+
+  schemas:
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code:
+              type: string
+              enum: [VALIDATION_ERROR, NOT_FOUND, CONFLICT, INTERNAL_ERROR]
+            message:
+              type: string
+            details:
+              type: object
+              additionalProperties: true
+
+    Timestamps:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Dueno:
+      allOf:
+        - type: object
+          required: [id, nombre]
+          properties:
+            id:
+              type: integer
+            nombre:
+              type: string
+            email:
+              type: [string, 'null']
+              format: email
+            telefono:
+              type: [string, 'null']
+        - $ref: '#/components/schemas/Timestamps'
+
+    DuenoCreate:
+      type: object
+      required: [nombre]
+      properties:
+        nombre:
+          type: string
+          minLength: 1
+          maxLength: 200
+        email:
+          type: [string, 'null']
+          format: email
+        telefono:
+          type: [string, 'null']
+
+    DuenoUpdate:
+      type: object
+      properties:
+        nombre:
+          type: string
+          minLength: 1
+          maxLength: 200
+        email:
+          type: [string, 'null']
+          format: email
+        telefono:
+          type: [string, 'null']
+
+    Mascota:
+      allOf:
+        - type: object
+          required: [id, nombre, especie, duenoId]
+          properties:
+            id:
+              type: integer
+            nombre:
+              type: string
+            especie:
+              type: string
+            raza:
+              type: [string, 'null']
+            duenoId:
+              type: integer
+        - $ref: '#/components/schemas/Timestamps'
+
+    MascotaCreate:
+      type: object
+      required: [nombre, especie, duenoId]
+      properties:
+        nombre:
+          type: string
+        especie:
+          type: string
+        raza:
+          type: [string, 'null']
+        duenoId:
+          type: integer
+          minimum: 1
+
+    MascotaUpdate:
+      type: object
+      properties:
+        nombre:
+          type: string
+        especie:
+          type: string
+        raza:
+          type: [string, 'null']
+        duenoId:
+          type: integer
+          minimum: 1
+
+    Cita:
+      allOf:
+        - type: object
+          required: [id, mascotaId, fechaHora, motivo]
+          properties:
+            id:
+              type: integer
+            mascotaId:
+              type: integer
+            fechaHora:
+              type: string
+              format: date-time
+            motivo:
+              type: string
+              maxLength: 500
+        - $ref: '#/components/schemas/Timestamps'
+
+    CitaCreate:
+      type: object
+      required: [mascotaId, fechaHora, motivo]
+      properties:
+        mascotaId:
+          type: integer
+          minimum: 1
+        fechaHora:
+          type: string
+          format: date-time
+        motivo:
+          type: string
+          maxLength: 500
+
+    CitaUpdate:
+      type: object
+      properties:
+        mascotaId:
+          type: integer
+          minimum: 1
+        fechaHora:
+          type: string
+          format: date-time
+        motivo:
+          type: string
+          maxLength: 500
+
+    Perfil:
+      allOf:
+        - type: object
+          required: [id, slug, nombre, activo]
+          properties:
+            id:
+              type: integer
+            slug:
+              type: string
+            nombre:
+              type: string
+            descripcion:
+              type: [string, 'null']
+            activo:
+              type: boolean
+        - $ref: '#/components/schemas/Timestamps'
+
+    PerfilCreate:
+      type: object
+      required: [slug, nombre]
+      properties:
+        slug:
+          type: string
+          pattern: '^[a-z0-9-]+$'
+        nombre:
+          type: string
+        descripcion:
+          type: [string, 'null']
+        activo:
+          type: boolean
+          default: true
+
+    PerfilUpdate:
+      type: object
+      properties:
+        slug:
+          type: string
+          pattern: '^[a-z0-9-]+$'
+        nombre:
+          type: string
+        descripcion:
+          type: [string, 'null']
+        activo:
+          type: boolean
+
+    PaginatedMeta:
+      type: object
+      required: [items, page, pageSize, total]
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        total:
+          type: integer
+
+    DuenoListResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          allOf:
+            - $ref: '#/components/schemas/PaginatedMeta'
+            - type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Dueno'
+
+    DuenoResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          $ref: '#/components/schemas/Dueno'
+
+    MascotaListResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          allOf:
+            - $ref: '#/components/schemas/PaginatedMeta'
+            - type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    allOf:
+                      - $ref: '#/components/schemas/Mascota'
+                      - type: object
+                        properties:
+                          dueno:
+                            $ref: '#/components/schemas/Dueno'
+
+    MascotaResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          $ref: '#/components/schemas/Mascota'
+
+    MascotaDetailResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          allOf:
+            - $ref: '#/components/schemas/Mascota'
+            - type: object
+              properties:
+                dueno:
+                  $ref: '#/components/schemas/Dueno'
+                citas:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Cita'
+
+    CitaListResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          allOf:
+            - $ref: '#/components/schemas/PaginatedMeta'
+            - type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    allOf:
+                      - $ref: '#/components/schemas/Cita'
+                      - type: object
+                        properties:
+                          mascota:
+                            allOf:
+                              - $ref: '#/components/schemas/Mascota'
+                              - type: object
+                                properties:
+                                  dueno:
+                                    $ref: '#/components/schemas/Dueno'
+
+    CitaResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          $ref: '#/components/schemas/Cita'
+
+    CitaDetailResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          allOf:
+            - $ref: '#/components/schemas/Cita'
+            - type: object
+              properties:
+                mascota:
+                  allOf:
+                    - $ref: '#/components/schemas/Mascota'
+                    - type: object
+                      properties:
+                        dueno:
+                          $ref: '#/components/schemas/Dueno'
+
+    PerfilListResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          allOf:
+            - $ref: '#/components/schemas/PaginatedMeta'
+            - type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Perfil'
+
+    PerfilResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          $ref: '#/components/schemas/Perfil'
+
+    IdDeleteResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: object
+          required: [id]
+          properties:
+            id:
+              type: integer

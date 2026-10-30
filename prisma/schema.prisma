@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Dueno {
+  id        Int       @id @default(autoincrement())
+  nombre    String
+  email     String?   @unique
+  telefono  String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  mascotas  Mascota[]
+}
+
+model Mascota {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  especie   String
+  raza      String?
+  duenoId   Int
+  dueno     Dueno    @relation(fields: [duenoId], references: [id], onDelete: Cascade)
+  citas     Cita[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Cita {
+  id        Int      @id @default(autoincrement())
+  mascotaId Int
+  mascota   Mascota  @relation(fields: [mascotaId], references: [id], onDelete: Cascade)
+  fechaHora DateTime
+  motivo    String   @db.VarChar(500)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Perfil {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique
+  nombre      String
+  descripcion String?
+  activo      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
